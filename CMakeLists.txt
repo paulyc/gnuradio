@@ -65,6 +65,9 @@ set(CLANG_MIN_VERSION "3.4.0")
 set(APPLECLANG_MIN_VERSION "500")
 set(MSVC_MIN_VERSION "1800")
 
+# Enable generation of compile_commands.json for code completion engines
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 ########################################################################
 # Configure CMake policies
 ########################################################################
@@ -146,7 +149,7 @@ ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     SET(CMAKE_CXX_STANDARD 11)
 ELSE()
-    message(warning "C++ standard could not be set because compiler is not GNU, Clang or MSVC.")
+    message(WARNING "C++ standard could not be set because compiler is not GNU, Clang or MSVC.")
 ENDIF()
 
 IF(CMAKE_C_COMPILER_ID STREQUAL "GNU")
@@ -156,7 +159,7 @@ ELSEIF(CMAKE_C_COMPILER_ID MATCHES "Clang")
 ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     SET(CMAKE_C_STANDARD 11)
 ELSE()
-    message(warning "C standard could not be set because compiler is not GNU, Clang or MSVC.")
+    message(WARNING "C standard could not be set because compiler is not GNU, Clang or MSVC.")
 ENDIF()
 
 ########################################################################

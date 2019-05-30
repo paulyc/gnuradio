@@ -25,20 +25,20 @@ cmake_minimum_required(VERSION 3.8)
 project(gr-howto CXX C)
 enable_testing()
 
-#install to PyBOMBS target prefix if defined
+# Install to PyBOMBS target prefix if defined
 if(DEFINED ENV{PYBOMBS_PREFIX})
     set(CMAKE_INSTALL_PREFIX $ENV{PYBOMBS_PREFIX})
     message(STATUS "PyBOMBS installed GNU Radio. Setting CMAKE_INSTALL_PREFIX to $ENV{PYBOMBS_PREFIX}")
 endif()
 
-#select the release build type by default to get optimization flags
+# Select the release build type by default to get optimization flags
 if(NOT CMAKE_BUILD_TYPE)
    set(CMAKE_BUILD_TYPE "Release")
    message(STATUS "Build type not specified: defaulting to release.")
 endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 
-#make sure our local CMake Modules path comes first
+# Make sure our local CMake Modules path comes first
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
 # Set the version information here
@@ -49,6 +49,9 @@ set(VERSION_INFO_MAINT_VERSION git)
 
 cmake_policy(SET CMP0011 NEW)
 
+# Enable generation of compile_commands.json for code completion engines
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 ########################################################################
 # Compiler specific setup
 ########################################################################
@@ -58,6 +61,26 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
     #http://gcc.gnu.org/wiki/Visibility
     add_definitions(-fvisibility=hidden)
 endif()
+
+IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    SET(CMAKE_CXX_STANDARD 11)
+ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    SET(CMAKE_CXX_STANDARD 11)
+ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    SET(CMAKE_CXX_STANDARD 11)
+ELSE()
+    message(WARNING "C++ standard could not be set because compiler is not GNU, Clang or MSVC.")
+ENDIF()
+
+IF(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    SET(CMAKE_C_STANDARD 11)
+ELSEIF(CMAKE_C_COMPILER_ID MATCHES "Clang")
+    SET(CMAKE_C_STANDARD 11)
+ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    SET(CMAKE_C_STANDARD 11)
+ELSE()
+    message(WARNING "C standard could not be set because compiler is not GNU, Clang or MSVC.")
+ENDIF()
 
 ########################################################################
 # Install directories
@@ -71,19 +94,12 @@ if(NOT CMAKE_MODULES_DIR)
   set(CMAKE_MODULES_DIR lib${LIB_SUFFIX}/cmake)
 endif(NOT CMAKE_MODULES_DIR)
 
-set(GR_RUNTIME_DIR      bin)
-set(GR_LIBRARY_DIR      lib${LIB_SUFFIX})
 set(GR_INCLUDE_DIR      include/howto)
-SET(GR_CMAKE_DIR        ${CMAKE_MODULES_DIR}/howto)
-set(GR_DATA_DIR         share)
+set(GR_CMAKE_DIR        ${CMAKE_MODULES_DIR}/howto)
 set(GR_PKG_DATA_DIR     ${GR_DATA_DIR}/${CMAKE_PROJECT_NAME})
-set(GR_DOC_DIR          ${GR_DATA_DIR}/doc)
 set(GR_PKG_DOC_DIR      ${GR_DOC_DIR}/${CMAKE_PROJECT_NAME})
-set(GR_CONF_DIR         etc)
 set(GR_PKG_CONF_DIR     ${GR_CONF_DIR}/${CMAKE_PROJECT_NAME}/conf.d)
-set(GR_LIBEXEC_DIR      libexec)
 set(GR_PKG_LIBEXEC_DIR  ${GR_LIBEXEC_DIR}/${CMAKE_PROJECT_NAME})
-set(GRC_BLOCKS_DIR      ${GR_PKG_DATA_DIR}/grc/blocks)
 
 ########################################################################
 # On Apple only, set install name and use rpath correctly, if not already set
@@ -114,9 +130,9 @@ find_package(Doxygen)
 # Setup doxygen option
 ########################################################################
 if(DOXYGEN_FOUND)
-	option(ENABLE_DOXYGEN "Build docs using Doxygen" ON)
+    option(ENABLE_DOXYGEN "Build docs using Doxygen" ON)
 else(DOXYGEN_FOUND)
-	option(ENABLE_DOXYGEN "Build docs using Doxygen" OFF)
+    option(ENABLE_DOXYGEN "Build docs using Doxygen" OFF)
 endif(DOXYGEN_FOUND)
 
 ########################################################################
@@ -141,9 +157,7 @@ add_subdirectory(apps)
 add_subdirectory(docs)
 add_subdirectory(swig)
 add_subdirectory(python)
-if(ENABLE_GRC)
-    add_subdirectory(grc)
-endif(ENABLE_GRC)
+add_subdirectory(grc)
 
 ########################################################################
 # Install cmake search helper for this library

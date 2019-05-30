@@ -281,7 +281,6 @@ namespace gr {
 # Block definition header file (for include/)
 Templates['block_def_h'] = r'''/* -*- c++ -*- */
 ${str_to_fancyc_comment(license)}
-
 #ifndef INCLUDED_${modname.upper()}_${blockname.upper()}_H
 #define INCLUDED_${modname.upper()}_${blockname.upper()}_H
 
@@ -353,17 +352,16 @@ ${str_to_python_comment(license)}
         }[blocktype]
 %>
 % if blocktype != 'hier':
-
 import numpy\
 <%
     if blocktype == 'source':
         inputsig = 'None'
     else:
-        inputsig = '[<+numpy.float32+>]'
+        inputsig = '[<+numpy.float32+>, ]'
     if blocktype == 'sink':
         outputsig = 'None'
     else:
-        outputsig = '[<+numpy.float32+>]'
+        outputsig = '[<+numpy.float32+>, ]'
 %>
 % else:
 <%
@@ -406,8 +404,8 @@ class ${blockname}(${parenttype}):
 <% return %>
 % else:
             name="${blockname}",
-            in_sig="${inputsig}",
-            out_sig="${outputsig}${deciminterp}")
+            in_sig=${inputsig},
+            out_sig=${outputsig}${deciminterp})
 % endif
 
 % if blocktype == 'general':
@@ -447,7 +445,6 @@ class ${blockname}(${parenttype}):
 # C++ file for QA (Boost UTF style)
 Templates['qa_cpp_boostutf'] = '''/* -*- c++ -*- */
 ${str_to_fancyc_comment(license)}
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -466,7 +463,6 @@ BOOST_AUTO_TEST_CASE(test_${blockname}_t1)
 # C++ file for QA
 Templates['qa_cpp'] = '''/* -*- c++ -*- */
 ${str_to_fancyc_comment(license)}
-
 #include <gnuradio/attributes.h>
 #include <cppunit/TestAssert.h>
 #include "qa_${blockname}.h"
@@ -489,7 +485,6 @@ namespace gr {
 # Header file for QA
 Templates['qa_h'] = '''/* -*- c++ -*- */
 ${str_to_fancyc_comment(license)}
-
 #ifndef _QA_${blockname.upper()}_H_
 #define _QA_${blockname.upper()}_H_
 
@@ -521,14 +516,12 @@ namespace gr {
 Templates['qa_python'] = '''#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 ${str_to_python_comment(license)}
-#
-
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 % if lang == 'cpp':
-from . import ${modname}_swig as ${modname}
+import ${modname}_swig as ${modname}
 % else:
-from .${blockname} import ${blockname}
+from ${blockname} import ${blockname}
 % endif
 
 class qa_${blockname}(gr_unittest.TestCase):
@@ -546,7 +539,7 @@ class qa_${blockname}(gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_${blockname}, "qa_${blockname}.yml")
+    gr_unittest.run(qa_${blockname})
 '''
 
 Templates['grc_yml'] = '''id: ${modname}_${blockname}
@@ -733,7 +726,6 @@ ${modname}_${blockname}::work(int noutput_items,
 # Block definition header file (for include/)
 Templates['block_h36'] = r'''/* -*- c++ -*- */
 ${str_to_fancyc_comment(license)}
-
 #ifndef INCLUDED_${modname.upper()}_${blockname.upper()}_H
 #define INCLUDED_${modname.upper()}_${blockname.upper()}_H
 
