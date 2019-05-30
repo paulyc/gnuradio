@@ -25,7 +25,6 @@
 #endif
 
 #include "local_sighandler.h"
-#include <stdexcept>
 #include <stdio.h>
 #include <string.h>
 
@@ -50,7 +49,7 @@ namespace gr {
 #endif
   }
 
-  local_sighandler::~local_sighandler()
+  local_sighandler::~local_sighandler() noexcept(false)
   {
 #ifdef HAVE_SIGACTION
     if(sigaction (d_signum, &d_old_action, 0) < 0) {
@@ -60,7 +59,7 @@ namespace gr {
 #endif
   }
 
-  void
+  [[ noreturn ]] void
   local_sighandler::throw_signal(int signum)
   {
     throw signal(signum);

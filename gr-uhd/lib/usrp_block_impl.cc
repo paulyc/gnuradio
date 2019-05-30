@@ -239,7 +239,7 @@ bool usrp_block_impl::_unpack_chan_command(
     else {
       return false;
     }
-  } catch (pmt::wrong_type w) {
+  } catch (const pmt::wrong_type&) {
     return false;
   }
   return true;

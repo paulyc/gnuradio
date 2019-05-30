@@ -257,7 +257,7 @@ namespace gr {
       try {
         gr::thread::thread_bind_to_processor(thread, mask);
       }
-      catch (std::runtime_error e) {
+      catch (const std::runtime_error&) {
         std::cerr << "set_processor_affinity: invalid mask."  << std::endl;;
       }
     }

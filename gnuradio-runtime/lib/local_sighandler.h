@@ -29,6 +29,7 @@
 
 #include <gnuradio/api.h>
 #include <string>
+#include <stdexcept>
 
 namespace gr {
 
@@ -49,10 +50,10 @@ namespace gr {
 
   public:
     local_sighandler(int signum, void (*new_handler)(int));
-    ~local_sighandler();
+    ~local_sighandler() noexcept(false);
 
     /* throw gr_signal (signum) */
-    static void throw_signal(int signum);
+    [[ noreturn ]] static void throw_signal(int signum);
   };
 
   /*!
