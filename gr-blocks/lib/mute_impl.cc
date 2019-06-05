@@ -69,7 +69,9 @@ namespace gr {
       int size = noutput_items;
 
       if(d_mute) {
-        memset(optr, 0, noutput_items * sizeof(T));
+          while(size-- > 0) {
+              *optr++ = static_cast<T>(0);
+          }
       }
       else {
         while(size >= 8) {

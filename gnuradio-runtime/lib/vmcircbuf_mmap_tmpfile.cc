@@ -74,7 +74,7 @@ namespace gr {
         if(errno == EEXIST) // File already exists (shouldn't happen).  Try again
           continue;
 
-        char msg[1024];
+        char msg[2048];
         snprintf(msg, sizeof (msg),
                  "gr::vmcircbuf_mmap_tmpfile: open [%s]", seg_name);
         perror(msg);

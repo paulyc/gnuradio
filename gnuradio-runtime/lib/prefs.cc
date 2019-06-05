@@ -114,7 +114,7 @@ namespace gr {
             std::string value = o.value[0];
             d_config_map[section][key] = value;
           }
-        } catch(std::exception e) {
+        } catch(const std::exception &e) {
           std::cerr << "WARNING: Config file '" << fname << "' failed to parse:" << std::endl;
           std::cerr << e.what() << std::endl;
           std::cerr << "Skipping it" << std::endl;
